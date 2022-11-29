@@ -1,4 +1,4 @@
-package cn.factx.api;
+package cn.factx.api.util;
 
 public class Pair {
     private String key;

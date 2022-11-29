@@ -1,4 +1,4 @@
-package cn.factx.api.md5;
+package cn.factx.api.util.md5;
 
 
 import java.io.IOException;

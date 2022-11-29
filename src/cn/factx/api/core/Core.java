@@ -1,6 +1,8 @@
-package cn.factx.api;
+package cn.factx.api.core;
 
-import cn.factx.api.md5.DigestUtils;
+import cn.factx.api.util.Pair;
+import cn.factx.api.util.RequestMethod;
+import cn.factx.api.util.md5.DigestUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -8,14 +10,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Map;
 
 public class Core {
-    protected static final String api_server_url = "https://api.factx.cn";
+    public static String api_server_url = "https://api.factx.cn";
 
-    protected static String submit(RequestMethod requestMethod, String uri, long appId, String appKey, List<Pair> params, String data) {
+    public static String submit(RequestMethod requestMethod, String uri, long appId, String appKey, List<Pair> params, String data) {
         long timestrap = System.currentTimeMillis();
-        String src = appId + requestMethod.name() + timestrap + appKey + uri;
+        String src = appId + requestMethod.method + timestrap + appKey + uri;
         String sign = DigestUtils.md5DigestAsHex(src.getBytes(StandardCharsets.UTF_8));
         System.out.println(src);
 
@@ -29,13 +30,14 @@ public class Core {
                 }
             }
         }
+        System.out.println(submitUrl);
 
         HttpURLConnection con = null;
         try {
             URL obj = new URL(submitUrl);
             con = (HttpURLConnection) obj.openConnection();
 
-            con.setRequestMethod(requestMethod.name());
+            con.setRequestMethod(requestMethod.method);
             con.setRequestProperty("Content-Type", "application/json; utf-8");
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
@@ -75,4 +77,5 @@ public class Core {
         }
         return "连接服务器失败";
     }
+
 }
